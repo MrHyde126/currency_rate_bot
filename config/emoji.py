@@ -4,7 +4,11 @@ if config.emoji:
     DOLLAR = ' 💵 '
     BACK = ' 👈🏼 '
     DOOR = ' 🚪 '
+    BELL = ' 🔔 '
+    PAPYRUS = ' 📜 '
 else:
     DOLLAR = ''
     BACK = ''
     DOOR = ''
+    BELL = ''
+    PAPYRUS = ''

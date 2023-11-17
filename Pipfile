@@ -9,9 +9,9 @@ pydantic = "*"
 pydantic-settings = "*"
 requests = "*"
 sqlalchemy = "*"
+asyncpg = "*"
 
 [dev-packages]
-aiosqlite = "*"
 
 [requires]
 python_version = "3.11"

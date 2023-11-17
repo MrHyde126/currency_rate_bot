@@ -24,19 +24,14 @@ class User(Base):
     """Модель пользователя."""
 
     name: Mapped[str | None]
-    telegram_id: Mapped[int] = mapped_column(unique=True, index=True)
+    telegram_id: Mapped[str] = mapped_column(unique=True, index=True)
     subscribed: Mapped[bool] = mapped_column(default=False)
-    currency_rate_history: Mapped['CurrencyRateHistory'] = relationship(
-        'CurrencyRateHistory', back_populates='user', uselist=False
-    )
+    currency_rate_history: Mapped['CurrencyRateHistory'] = relationship()
 
 
 class CurrencyRateHistory(Base):
     """Модель истории курса валют."""
 
     user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    user: Mapped['User'] = relationship(
-        'User', back_populates='currency_rate_history'
-    )
     date: Mapped[datetime]
     rate: Mapped[float]
