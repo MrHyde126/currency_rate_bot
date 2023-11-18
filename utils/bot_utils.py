@@ -1,3 +1,4 @@
+from aiogram import Bot
 from aiogram.enums import ParseMode
 from aiogram.types import (
     CallbackQuery,
@@ -6,6 +7,8 @@ from aiogram.types import (
     TelegramObject,
 )
 from aiogram.utils.keyboard import InlineKeyboardBuilder, InlineKeyboardMarkup
+
+from handlers.service import get_currency_rate
 
 
 def get_markup(*buttons: list[tuple[str, str]]) -> InlineKeyboardMarkup:
@@ -33,3 +36,11 @@ async def bot_answer(
     elif isinstance(event, CallbackQuery):
         await event.message.edit_text(text, **kwargs)
         await event.answer()
+
+
+async def notification(
+    bot: Bot, tg_id: str, parse_mode: str = ParseMode.HTML
+) -> Message:
+    """Отправляет уведомление о курсе в чат."""
+    text = await get_currency_rate(tg_id)
+    return await bot.send_message(tg_id, text, parse_mode=parse_mode)

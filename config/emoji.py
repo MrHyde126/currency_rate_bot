@@ -2,13 +2,17 @@ from .bot_config import config
 
 if config.emoji:
     DOLLAR = ' 💵 '
-    BACK = ' 👈🏼 '
     DOOR = ' 🚪 '
     BELL = ' 🔔 '
+    CLOCK = ' 🕓 '
+    CALENDAR = ' 📅 '
+    UNSUBSCRIBE = ' 🔕 '
     PAPYRUS = ' 📜 '
 else:
     DOLLAR = ''
-    BACK = ''
     DOOR = ''
     BELL = ''
+    CLOCK = ''
+    CALENDAR = ''
+    UNSUBSCRIBE = ''
     PAPYRUS = ''

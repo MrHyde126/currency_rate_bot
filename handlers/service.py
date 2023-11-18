@@ -7,10 +7,11 @@ from aiogram.utils.markdown import hbold
 from db.functions import save_currency_rate_history
 
 
-async def get_currency_rate(tg_id: str, date: datetime) -> str:
+async def get_currency_rate(tg_id: str) -> str:
     """Получает курс доллара."""
     try:
         data = requests.get('https://www.cbr-xml-daily.ru/daily_json.js').json()
+        date = datetime.now()
         formatted_date = date.strftime('%d.%m.%Y %H:%M:%S')
         rate = data['Valute']['USD']['Value']
         await save_currency_rate_history(tg_id, date, rate)

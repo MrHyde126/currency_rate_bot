@@ -51,7 +51,34 @@ async def get_currency_rate_history(tg_id: str) -> list[CurrencyRateHistory]:
             if not user:
                 return []
 
-            history_query = select(CurrencyRateHistory).where(
-                CurrencyRateHistory.user_id == user.id
+            history_query = (
+                select(CurrencyRateHistory)
+                .where(CurrencyRateHistory.user_id == user.id)
+                .limit(20)
+                .order_by(CurrencyRateHistory.date.desc())
             )
             return await session.scalars(history_query)
+
+
+async def subscription_toggle(tg_id: str) -> None:
+    """Переключает состояние подписки пользователя."""
+    async with await get_db_session(DATABASE_URL) as session:
+        async with session.begin():
+            user_query = select(User).where(User.telegram_id == tg_id)
+            user = await session.scalar(user_query)
+            if not user:
+                return False
+
+            user.subscribed = not user.subscribed
+            await session.commit()
+
+
+async def user_is_subscribed(tg_id: str) -> bool:
+    """Проверяет подписан ли пользователь."""
+    async with await get_db_session(DATABASE_URL) as session:
+        async with session.begin():
+            user_query = select(User).where(User.telegram_id == tg_id)
+            user = await session.scalar(user_query)
+            if not user:
+                return False
+            return user.subscribed
