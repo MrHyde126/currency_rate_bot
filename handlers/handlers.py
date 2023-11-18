@@ -21,6 +21,8 @@ router = Router(name=__name__)
 
 scheduler = AsyncIOScheduler()
 
+TO_MAIN_MENU = get_markup([(bl.MAIN_MENU, cb.MAIN_MENU)])
+
 
 async def main_menu_generic(
     obj: Message | CallbackQuery,
@@ -64,8 +66,7 @@ async def dollar_rate(callback: CallbackQuery) -> None:
     """Отображает курс доллара."""
     tg_id = str(callback.from_user.id)
     text = await get_currency_rate(tg_id)
-    reply_markup = get_markup([(bl.MAIN_MENU, cb.MAIN_MENU)])
-    await bot_answer(callback, text, reply_markup)
+    await bot_answer(callback, text, TO_MAIN_MENU)
 
 
 @router.callback_query(F.data.startswith(cb.SUBSCRIBE))
@@ -90,8 +91,7 @@ async def subscribe_hourly(callback: CallbackQuery, bot: Bot) -> None:
     )
     if not scheduler.running:
         scheduler.start()
-    reply_markup = get_markup([(bl.MAIN_MENU, cb.MAIN_MENU)])
-    await bot_answer(callback, text, reply_markup)
+    await bot_answer(callback, text, TO_MAIN_MENU)
 
 
 @router.callback_query(F.data.startswith(cb.DAILY))
@@ -105,8 +105,7 @@ async def subscribe_daily(callback: CallbackQuery, bot: Bot) -> None:
     )
     if not scheduler.running:
         scheduler.start()
-    reply_markup = get_markup([(bl.MAIN_MENU, cb.MAIN_MENU)])
-    await bot_answer(callback, text, reply_markup)
+    await bot_answer(callback, text, TO_MAIN_MENU)
 
 
 @router.callback_query(F.data.startswith(cb.UNSUBSCRIBE))
@@ -119,8 +118,7 @@ async def unsubscribe(callback: CallbackQuery) -> None:
     except JobLookupError:
         pass
     text = 'Вы отписаны от получения уведомлений о курсе.'
-    reply_markup = get_markup([(bl.MAIN_MENU, cb.MAIN_MENU)])
-    await bot_answer(callback, text, reply_markup)
+    await bot_answer(callback, text, TO_MAIN_MENU)
 
 
 @router.callback_query(F.data.startswith(cb.HISTORY))
@@ -132,5 +130,4 @@ async def history(callback: CallbackQuery) -> None:
     for item in history:
         formatted_date = item.date.strftime('%d.%m.%Y %H:%M:%S')
         text += f'{formatted_date} - {hbold(item.rate)} р.\n'
-    reply_markup = get_markup([(bl.MAIN_MENU, cb.MAIN_MENU)])
-    await bot_answer(callback, text, reply_markup)
+    await bot_answer(callback, text, TO_MAIN_MENU)
